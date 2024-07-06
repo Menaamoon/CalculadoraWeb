@@ -1,0 +1,160 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Calculadora";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e0f7fa; /* Fondo azul claro */
+            margin: 0;
+        }
+
+        .calculator {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            background-color: #fff;
+        }
+
+        .display {
+            font-size: 2em;
+            padding: 20px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+            background-color: #b2ebf2; /* Fondo azul pastel */
+            color: #00796b; /* Texto verde oscuro */
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .button {
+            padding: 20px;
+            font-size: 1.5em;
+            border: 1px solid #ddd;
+            background-color: #80deea; /* Botones azul claro */
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+            .button:active {
+                background-color: #4dd0e1; /* Botones azul más claro */
+            }
+
+            .button:nth-child(4n) {
+                background-color: #0288d1; /* Botones azul oscuro */
+                color: white;
+            }
+
+            .button.equals {
+                background-color: #388e3c; /* Botón igual verde */
+                color: white;
+                grid-column: span 2;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <div class="button" onclick="sqrt()">√</div>
+            <div class="button" onclick="clearDisplay()">C</div>
+            <div class="button" onclick="backspace()">⌫</div>
+            <div class="button" onclick="factorial()">n!</div>
+            <div class="button" onclick="addToDisplay('/')">÷</div>
+            <div class="button" onclick="addToDisplay('^')">xʸ</div>
+            <div class="button" onclick="addToDisplay('10^')">10ˣ</div>
+            <div class="button" onclick="addToDisplay('*')">×</div>
+            <div class="button" onclick="addToDisplay('log(')">log</div>
+            <div class="button" onclick="addToDisplay('x^2')">x²</div>
+            <div class="button" onclick="addToDisplay('-')">-</div>
+            <div class="button" onclick="addToDisplay('7')">7</div>
+            <div class="button" onclick="addToDisplay('8')">8</div>
+            <div class="button" onclick="addToDisplay('9')">9</div>
+            <div class="button" onclick="addToDisplay('+')">+</div>
+            <div class="button" onclick="addToDisplay('4')">4</div>
+            <div class="button" onclick="addToDisplay('5')">5</div>
+            <div class="button" onclick="addToDisplay('6')">6</div>
+            <div class="button" onclick="addToDisplay('±')">±</div>
+            <div class="button" onclick="addToDisplay('1')">1</div>
+            <div class="button" onclick="addToDisplay('2')">2</div>
+            <div class="button" onclick="addToDisplay('3')">3</div>
+            <div class="button" onclick="addToDisplay('.')">,</div>
+            <div class="button" onclick="addToDisplay('0')" style="grid-column: span 2">0</div>
+            <div class="button equals" onclick="calculate()">=</div>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+
+        function addToDisplay(value) {
+            if (display.innerText === '0') {
+                display.innerText = value;
+            } else {
+                display.innerText += value;
+            }
+        }
+
+        function clearDisplay() {
+            display.innerText = '0';
+        }
+
+        function backspace() {
+            display.innerText = display.innerText.slice(0, -1);
+            if (display.innerText === '') {
+                display.innerText = '0';
+            }
+        }
+
+        function calculate() {
+            try {
+                let expression = display.innerText
+                    .replace('÷', '/')
+                    .replace('×', '*')
+                    .replace('x^2', '**2')
+                    .replace('10^', '10**')
+                    .replace('log(', 'Math.log10(');
+                display.innerText = eval(expression);
+            } catch (e) {
+                display.innerText = 'Error';
+            }
+        }
+
+        function sqrt() {
+            display.innerText = Math.sqrt(eval(display.innerText));
+        }
+
+        function factorial() {
+            let num = parseInt(display.innerText);
+            if (num === 0 || num === 1) {
+                display.innerText = '1';
+                return;
+            }
+            let fact = 1;
+            for (let i = num; i > 1; i--) {
+                fact *= i;
+            }
+            display.innerText = fact;
+        }
+    </script>
+
+</body>
+</html>
+
